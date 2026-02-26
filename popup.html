@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>自動簽到/簽退</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="container">
+    <h2 class="title">自動簽到 / 簽退</h2>
+
+    <!-- 帳號密碼 -->
+    <section class="section">
+      <h3 class="section-title">帳號設定</h3>
+      <div class="field-row">
+        <label for="uid">員工編號</label>
+        <input type="text" id="uid" maxlength="8" placeholder="8碼集團員編" autocomplete="off">
+      </div>
+      <div class="field-row">
+        <label for="password">密碼</label>
+        <input type="password" id="password" placeholder="請輸入密碼" autocomplete="off">
+      </div>
+    </section>
+
+    <!-- 週排班表 -->
+    <section class="section">
+      <h3 class="section-title">每週打卡排程</h3>
+      <table class="schedule-table">
+        <thead>
+          <tr>
+            <th>日期</th>
+            <th>上班簽到</th>
+            <th>下班簽退</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr data-day="mon">
+            <td class="day-label">週一</td>
+            <td class="time-cell">
+              <input type="text" class="time-input" id="sign-in-mon" value="09:00" placeholder="HH:MM" maxlength="5">
+              <label class="skip-label">
+                <input type="checkbox" class="skip-check" data-day="mon" data-type="signIn"> 跳過
+              </label>
+            </td>
+            <td class="time-cell">
+              <input type="text" class="time-input" id="sign-out-mon" value="18:00" placeholder="HH:MM" maxlength="5">
+              <label class="skip-label">
+                <input type="checkbox" class="skip-check" data-day="mon" data-type="signOut"> 跳過
+              </label>
+            </td>
+          </tr>
+          <tr data-day="tue">
+            <td class="day-label">週二</td>
+            <td class="time-cell">
+              <input type="text" class="time-input" id="sign-in-tue" value="09:00" placeholder="HH:MM" maxlength="5">
+              <label class="skip-label">
+                <input type="checkbox" class="skip-check" data-day="tue" data-type="signIn"> 跳過
+              </label>
+            </td>
+            <td class="time-cell">
+              <input type="text" class="time-input" id="sign-out-tue" value="18:00" placeholder="HH:MM" maxlength="5">
+              <label class="skip-label">
+                <input type="checkbox" class="skip-check" data-day="tue" data-type="signOut"> 跳過
+              </label>
+            </td>
+          </tr>
+          <tr data-day="wed">
+            <td class="day-label">週三</td>
+            <td class="time-cell">
+              <input type="text" class="time-input" id="sign-in-wed" value="09:00" placeholder="HH:MM" maxlength="5">
+              <label class="skip-label">
+                <input type="checkbox" class="skip-check" data-day="wed" data-type="signIn"> 跳過
+              </label>
+            </td>
+            <td class="time-cell">
+              <input type="text" class="time-input" id="sign-out-wed" value="18:00" placeholder="HH:MM" maxlength="5">
+              <label class="skip-label">
+                <input type="checkbox" class="skip-check" data-day="wed" data-type="signOut"> 跳過
+              </label>
+            </td>
+          </tr>
+          <tr data-day="thu">
+            <td class="day-label">週四</td>
+            <td class="time-cell">
+              <input type="text" class="time-input" id="sign-in-thu" value="09:00" placeholder="HH:MM" maxlength="5">
+              <label class="skip-label">
+                <input type="checkbox" class="skip-check" data-day="thu" data-type="signIn"> 跳過
+              </label>
+            </td>
+            <td class="time-cell">
+              <input type="text" class="time-input" id="sign-out-thu" value="18:00" placeholder="HH:MM" maxlength="5">
+              <label class="skip-label">
+                <input type="checkbox" class="skip-check" data-day="thu" data-type="signOut"> 跳過
+              </label>
+            </td>
+          </tr>
+          <tr data-day="fri">
+            <td class="day-label">週五</td>
+            <td class="time-cell">
+              <input type="text" class="time-input" id="sign-in-fri" value="09:00" placeholder="HH:MM" maxlength="5">
+              <label class="skip-label">
+                <input type="checkbox" class="skip-check" data-day="fri" data-type="signIn"> 跳過
+              </label>
+            </td>
+            <td class="time-cell">
+              <input type="text" class="time-input" id="sign-out-fri" value="18:00" placeholder="HH:MM" maxlength="5">
+              <label class="skip-label">
+                <input type="checkbox" class="skip-check" data-day="fri" data-type="signOut"> 跳過
+              </label>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- 儲存按鈕 -->
+    <button id="save-btn" class="save-btn">儲存設定</button>
+    <div id="save-msg" class="save-msg"></div>
+
+    <!-- 今日狀態 -->
+    <section class="section status-section">
+      <h3 class="section-title">今日打卡狀態</h3>
+      <div class="status-row">
+        <span class="status-label">上班簽到</span>
+        <span id="status-sign-in" class="status-value">—</span>
+        <button class="run-btn" id="run-sign-in">立即執行</button>
+      </div>
+      <div class="status-row">
+        <span class="status-label">下班簽退</span>
+        <span id="status-sign-out" class="status-value">—</span>
+        <button class="run-btn" id="run-sign-out">立即執行</button>
+      </div>
+    </section>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

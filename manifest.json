@@ -1,0 +1,34 @@
+{
+  "manifest_version": 3,
+  "name": "自動簽到/簽退",
+  "version": "1.0.0",
+  "description": "定時自動執行上下班打卡（默默用）",
+  "permissions": [
+    "storage",
+    "alarms",
+    "tabs",
+    "scripting",
+    "notifications"
+  ],
+  "host_permissions": [
+    "https://go.linyuan.com.tw/*",
+    "https://w3.cathaylife.com.tw/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "自動簽到/簽退設定",
+    "default_icon": {
+      "16": "icon16.png",
+      "48": "icon48.png",
+      "128": "icon128.png"
+    }
+  },
+  "icons": {
+    "16": "icon16.png",
+    "48": "icon48.png",
+    "128": "icon128.png"
+  }
+}
