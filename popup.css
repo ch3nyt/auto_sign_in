@@ -43,6 +43,14 @@ body {
   margin-bottom: 10px;
 }
 
+.status-date {
+  font-size: 11px;
+  font-weight: 400;
+  color: #999;
+  text-transform: none;
+  letter-spacing: 0;
+}
+
 /* 帳號欄位 */
 .field-row {
   display: flex;

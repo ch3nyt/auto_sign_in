@@ -39,21 +39,35 @@ async function loadSettings() {
 }
 
 // ──────────────────────────────────────────────
+// 日期工具
+// ──────────────────────────────────────────────
+function todayDateStr() {
+  return new Date().toISOString().split('T')[0]; // "YYYY-MM-DD"
+}
+
+// ──────────────────────────────────────────────
 // 讀取並顯示今日狀態
 // ──────────────────────────────────────────────
 async function loadTodayStatus() {
   const { today } = await chrome.storage.local.get('today');
-  updateStatusUI(today);
+  // 如果儲存的是昨天（或更早）的資料，視為空白
+  const valid = today && today.date === todayDateStr() ? today : null;
+  updateStatusUI(valid);
 }
 
 function updateStatusUI(today) {
   const signInEl = document.getElementById('status-sign-in');
   const signOutEl = document.getElementById('status-sign-out');
+  const dateEl = document.getElementById('status-date');
+
+  if (dateEl) {
+    dateEl.textContent = today ? today.date : todayDateStr();
+  }
 
   if (!today) {
-    signInEl.textContent = '尚無資料';
+    signInEl.textContent = '—';
     signInEl.className = 'status-value';
-    signOutEl.textContent = '尚無資料';
+    signOutEl.textContent = '—';
     signOutEl.className = 'status-value';
     return;
   }
@@ -211,7 +225,9 @@ async function triggerAction(action) {
 // 監聽 storage 變化，當 background 更新今日狀態後自動刷新 UI 並恢復按鈕
 chrome.storage.onChanged.addListener((changes, area) => {
   if (area === 'local' && changes.today) {
-    updateStatusUI(changes.today.newValue);
+    const newToday = changes.today.newValue;
+    const valid = newToday && newToday.date === todayDateStr() ? newToday : null;
+    updateStatusUI(valid);
     document.getElementById('run-sign-in').disabled = false;
     document.getElementById('run-sign-in').textContent = '立即執行';
     document.getElementById('run-sign-out').disabled = false;

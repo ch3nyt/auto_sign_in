@@ -277,9 +277,22 @@ async function performAction(action, force = false) {
 // ──────────────────────────────────────────────
 // 初始化：安裝 / 啟動時建立 alarms
 // ──────────────────────────────────────────────
+// ──────────────────────────────────────────────
+// 午夜自動重置 Alarm（每日 00:00）
+// ──────────────────────────────────────────────
+function createMidnightAlarm() {
+  const midnight = new Date();
+  midnight.setHours(24, 0, 0, 0); // 次日 00:00:00
+  chrome.alarms.create('daily-reset', {
+    when: midnight.getTime(),
+    periodInMinutes: 24 * 60,
+  });
+}
+
 async function initialize() {
   const { settings } = await chrome.storage.local.get('settings');
   await rebuildAlarms(settings || null);
+  createMidnightAlarm();
 
   // 確保今日狀態存在（若跨日則重置）
   await getToday();
@@ -292,11 +305,19 @@ chrome.runtime.onStartup.addListener(initialize);
 // 監聽 Alarm 觸發
 // ──────────────────────────────────────────────
 chrome.alarms.onAlarm.addListener(async (alarm) => {
-  const name = alarm.name; // e.g. "sign-in-mon", "sign-out-fri"
+  const name = alarm.name; // e.g. "sign-in-mon", "sign-out-fri", "daily-reset"
   if (name.startsWith('sign-in-')) {
     await performAction('sign-in');
   } else if (name.startsWith('sign-out-')) {
     await performAction('sign-out');
+  } else if (name === 'daily-reset') {
+    const fresh = {
+      date: todayDateStr(),
+      signIn: { done: false, timestamp: null, success: null, error: null },
+      signOut: { done: false, timestamp: null, success: null, error: null },
+    };
+    await chrome.storage.local.set({ today: fresh });
+    console.log('[daily-reset] 今日打卡狀態已重置');
   }
 });
 
